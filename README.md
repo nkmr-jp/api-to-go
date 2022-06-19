@@ -1,14 +1,15 @@
 # api-to-go
 
 Convert Rest API's JSON payload to Golang struct.
+using [json-to-go](https://github.com/mholt/json-to-go)
 
 # Install
 ```sh
 git clone https://github.com/nkmr-jp/api-to-go.git
 cd api-to-go
 yarn install
-yarn fetch
-npm link
+yarn fetch # fetch json-to-go code
+npm link   # make the command available
 ```
 
 # Usage
