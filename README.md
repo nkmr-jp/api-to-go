@@ -1,13 +1,19 @@
 # api-to-go
 
+Convert Rest API's JSON payload to Golang struct.
+
 # Install
 ```sh
-npm install -g @nkmr-jp/api-to-go
+git clone https://github.com/nkmr-jp/api-to-go.git
+cd api-to-go
+yarn install
+yarn fetch
+npm link
 ```
 
 # Usage
 ```sh
-api-to-go https://api.github.com/users
+api-to-go https://api.github.com/users/github
 ```
 
 ```sh
@@ -41,14 +47,4 @@ type Users []struct {
   Type string `json:"type"`
   SiteAdmin bool `json:"site_admin"`
 }
-```
-
-# Development
-
-```sh
-# Make the command available
-npm link
-
-# Run Command
-api-to-go https://api.github.com/users/github
 ```

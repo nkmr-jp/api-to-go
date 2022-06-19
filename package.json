@@ -1,6 +1,6 @@
 {
   "name": "@nkmr-jp/api-to-go",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "repository": "git@github.com:nkmr-jp/api-to-go.git",
   "author": "nkmr-jp <nkmr.git@gmail.com>",
   "license": "MIT",
@@ -9,8 +9,7 @@
   },
   "homepage": "https://github.com/nkmr-jp/api-to-go#readme",
   "scripts": {
-    "patch-release": "npm version patch && npm publish --access=public && git push --follow-tags",
-    "fetch": "mkdir -p vendor && cd vendor && git clone https://github.com/mholt/json-to-go.git"
+    "fetch": "rm -rf ./vendor && mkdir -p vendor && cd vendor && git clone https://github.com/mholt/json-to-go.git"
   },
   "description": "Convert Rest API's JSON payload to Golang struct.",
   "bin": {
