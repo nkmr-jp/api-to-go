@@ -9,9 +9,10 @@
   },
   "homepage": "https://github.com/nkmr-jp/api-to-go#readme",
   "scripts": {
-    "fetch": "rm -rf ./vendor && mkdir -p vendor && cd vendor && git clone https://github.com/mholt/json-to-go.git"
+    "fetch": "rm -rf ./vendor && mkdir -p vendor && cd vendor && git clone https://github.com/mholt/json-to-go.git",
+    "setup": "yarn install && yarn fetch && npm -f link && exec $SHELL -l"
   },
-  "description": "Convert Rest API's JSON payload to Golang struct.",
+  "description": "Convert REST API's JSON payload to Golang struct.",
   "bin": {
     "api-to-go": "bin/api-to-go.js"
   },
