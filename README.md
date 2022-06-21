@@ -15,6 +15,7 @@ yarn setup
 cd [your project dir]
 api-to-go https://api.github.com/users
 # > ...
+# > saved:     api.github.com/users_sample.json
 # > generated: api.github.com/users.go
 ```
 
@@ -22,7 +23,8 @@ api-to-go https://api.github.com/users
 tree .
 # > .
 # > └── api.github.com
-# >     └── users.go
+# >     ├── users.go
+# >     └── users_sample.json
 ```
 
 ```go

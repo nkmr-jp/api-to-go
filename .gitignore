@@ -3,4 +3,5 @@ node_modules
 vendor
 .gitignore
 *.go
+*.json
 tmp
