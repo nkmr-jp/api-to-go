@@ -17,6 +17,10 @@
     "api-to-go": "bin/api-to-go.js"
   },
   "dependencies": {
+    "js-yaml": "^4.1.0",
     "node-fetch": "2"
+  },
+  "devDependencies": {
+    "jest": "^28.1.1"
   }
 }
