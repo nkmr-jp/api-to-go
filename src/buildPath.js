@@ -28,6 +28,7 @@ function _buildPath(url, configFile) {
     for (let i = 0; i < hostCfg.length; i++) {
       ret = _replacePath(url.pathname, hostCfg[i])
       if (ret) {
+        ret["Url"] = `${url.hostname}${ret.replacedPath}`
         ret["replacedUrl"] = `${url.hostname}${ret.replacedPath}`
         return ret
       }
