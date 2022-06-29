@@ -30,11 +30,9 @@ function _buildContent(struct, path, apiUrl) {
   if (struct.indexOf('time.') !== -1) {
     content = `${content}import "time"\n\n`
   }
-  let comment = `// ${path.struct} is struct of API's payload.\n`
-  comment += `// url: ${apiUrl}\n`
-  if (path.path.pathFormat) comment += `// format: ${path.path.pathFormat}\n`
-  comment += `// example: ${path.jsonFilePath}\n`
-  content = `${content}${comment}${struct}`
+  let comment = `// ${path.struct} ${apiUrl}`
+  if (path.path.pathFormat) comment += ` (${path.path.pathFormat})`
+  content = `${content}${comment}\n${struct}`
   return content
 }
 
