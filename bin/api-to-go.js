@@ -9,9 +9,10 @@ function run(url) {
   fetch(apiUrl)
     .then(res => res.json())
     .then(json => {
-        const path = buildPath(apiUrl)
+        const url = new URL(apiUrl);
+        const path = buildPath(url)
         const res = jsonToGo(JSON.stringify(json), path.struct);
-        const content = _buildContent(res.go, path, apiUrl)
+        const content = _buildContent(res.go, path, url)
         fs.mkdirSync(path.dir, {recursive: true})
         fs.writeFile(path.jsonFilePath, JSON.stringify(json, null, "\t"), (err) => {
           if (err) throw err;
@@ -25,13 +26,18 @@ function run(url) {
     );
 }
 
-function _buildContent(struct, path, apiUrl) {
+function _buildContent(struct, path, url) {
   let content = `package ${path.pkg}\n\n`
   if (struct.indexOf('time.') !== -1) {
     content = `${content}import "time"\n\n`
   }
-  let comment = `// ${path.struct} ${apiUrl}`
-  if (path.path.pathFormat) comment += ` (${path.path.pathFormat})`
+  let comment = `// ${path.struct} is the go struct of api's payload.`
+  if (path.path.pathFormat) {
+    comment += `\n// url ${url.origin}${path.path.pathFormat}`
+    comment += `\n// example ${url.href}`
+  } else {
+    comment += `\n// url ${url.href}`
+  }
   content = `${content}${comment}\n${struct}`
   return content
 }

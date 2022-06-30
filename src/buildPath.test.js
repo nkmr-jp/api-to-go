@@ -15,7 +15,7 @@ test('build path', () => {
     "struct": "Repos"
   }
   const received = buildPath(
-    "https://api.github.com/users/github/repos",
+    new URL("https://api.github.com/users/github/repos"),
     "./.api-to-go.test.yaml"
   )
   expect(received).toEqual(expected);
@@ -29,7 +29,7 @@ test('build path without format setting', () => {
     "replacedUrl": "api.github.com/organizations"
   }
   const received = buildPath(
-    "https://api.github.com/organizations",
+    new URL("https://api.github.com/organizations"),
     "./.api-to-go.test.yaml"
   )
   expect(received.path).toEqual(expected);
