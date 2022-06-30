@@ -20,3 +20,17 @@ test('build path', () => {
   )
   expect(received).toEqual(expected);
 });
+
+test('build path without format setting', () => {
+  const expected = {
+    "pathFormat": null,
+    "pathname": "/organizations",
+    "replacedPath": "/organizations",
+    "replacedUrl": "api.github.com/organizations"
+  }
+  const received = buildPath(
+    "https://api.github.com/organizations",
+    "./.api-to-go.test.yaml"
+  )
+  expect(received.path).toEqual(expected);
+});

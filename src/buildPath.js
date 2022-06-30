@@ -23,18 +23,22 @@ function buildPath(apiUrl, configFile = "./.api-to-go.yaml") {
 function _buildPath(url, configFile) {
   const cfg = _loadConfig(configFile)
   const hostCfg = cfg?.[url.hostname]
-  let ret;
+  let ret ={
+    pathname: url.pathname,
+    pathFormat: null,
+    replacedPath: url.pathname,
+    replacedUrl: `${url.hostname}${url.pathname}`,
+  }
   if (hostCfg !== undefined) {
     for (let i = 0; i < hostCfg.length; i++) {
-      ret = _replacePath(url.pathname, hostCfg[i])
-      if (ret) {
-        ret["Url"] = `${url.hostname}${ret.replacedPath}`
-        ret["replacedUrl"] = `${url.hostname}${ret.replacedPath}`
+      const replaced = _replacePath(url.pathname, hostCfg[i])
+      if (replaced) {
+        ret = replaced
+        ret["replacedUrl"] = `${url.hostname}${replaced.replacedPath}`
         return ret
       }
     }
   }
-  ret["replacedUrl"] = `${url.hostname}${url.pathname}`
   return ret
 }
 
