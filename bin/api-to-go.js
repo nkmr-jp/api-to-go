@@ -33,12 +33,12 @@ function _buildContent(struct, path, url) {
   }
   let comment = `// ${path.struct} is the go struct of api's payload.`
   if (path.path.pathFormat) {
-    comment += `\n// url ${url.origin}${path.path.pathFormat}`
-    comment += `\n// example ${url.href}`
+    comment += `\n//\n// url: ${url.origin}${path.path.pathFormat}`
+    comment += `\n// example: ${url.href}`
   } else {
-    comment += `\n// url ${url.href}`
+    comment += `\n//\n// url: ${url.href}`
   }
-  content = `${content}${comment}\n${struct}`
+  content = `${content}${comment}\n//\n${struct}`
   return content
 }
 
