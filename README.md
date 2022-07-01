@@ -41,6 +41,11 @@ package user
 
 import "time"
 
+// Repos is the go struct of api's payload.
+//
+// url: https://api.github.com/users/{user}/repos
+// example: https://api.github.com/users/github/repos
+//
 type Repos []struct {
 	ID int `json:"id"`
 	NodeID string `json:"node_id"`
