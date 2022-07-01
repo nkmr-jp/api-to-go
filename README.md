@@ -1,7 +1,7 @@
 # api-to-go
 
 Convert REST API's JSON payload to Golang struct.
-using [json-to-go](https://github.com/mholt/json-to-go)
+using [JSON-to-Go](https://github.com/mholt/json-to-go)
 
 # Install
 ```sh
