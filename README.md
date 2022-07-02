@@ -146,3 +146,6 @@ type Owner struct {
 	SiteAdmin bool `json:"site_admin"`
 }
 ```
+
+# Credits
+All credits for the original json-to-go belong to [mholt](https://github.com/mholt/)
