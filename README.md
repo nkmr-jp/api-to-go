@@ -5,9 +5,7 @@ using [JSON-to-Go](https://github.com/mholt/json-to-go)
 
 # Install
 ```sh
-git clone https://github.com/nkmr-jp/api-to-go.git
-cd api-to-go
-yarn setup
+npm i -g @nkmr-jp/api-to-go
 ```
 
 # Usage
