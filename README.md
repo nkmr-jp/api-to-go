@@ -11,7 +11,7 @@ yarn setup
 ```
 
 # Usage
-add config file `.api-to-go.yaml`.
+add config file `.api-to-go.yml`.
 ```yaml
 api.github.com:
   format:
@@ -30,7 +30,7 @@ check generated files and directories.
 ```sh
  tree -a .
 # > .
-# > ├── .api-to-go.yaml
+# > ├── .api-to-go.yml
 # > └── api.github.com
 # >     └── users
 # >         └── user

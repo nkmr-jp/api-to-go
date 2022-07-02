@@ -1,7 +1,7 @@
 const yaml = require("js-yaml");
 const fs = require("fs");
 
-function buildPath(url, configFile = "./.api-to-go.yaml") {
+function buildPath(url, configFile = "./.api-to-go.yml") {
   const path = _buildPath(url, configFile)
   const pathArr = path.replacedUrl.split("/")
   const pkg = pathArr[pathArr.length - 2].replace(/\./g, '')
