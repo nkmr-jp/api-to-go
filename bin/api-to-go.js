@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 const fetch = require('node-fetch');
 const fs = require('fs');
-const jsonToGo = require('../vendor/json-to-go/json-to-go.js');
+const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('../src/buildPath');
 
 function run(url) {

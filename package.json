@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/nkmr-jp/api-to-go#readme",
   "scripts": {
-    "fetch": "rm -rf ./vendor && mkdir -p vendor && cd vendor && git clone https://github.com/mholt/json-to-go.git",
+    "fetch": "cd vendor && curl -OL https://raw.githubusercontent.com/mholt/json-to-go/master/json-to-go.js",
     "setup": "yarn install && yarn fetch && npm -f link && exec $SHELL -l"
   },
   "description": "Convert REST API's JSON payload to Golang struct.",

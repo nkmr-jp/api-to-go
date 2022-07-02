@@ -1,6 +1,5 @@
 .idea
 node_modules
-vendor
 .gitignore
 *.go
 *.json
