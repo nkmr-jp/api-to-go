@@ -1,3 +1,4 @@
 api.github.com:
-  - /users/{user}
-  - /users/{user}/repos
+  format:
+    - /users/{user}
+    - /users/{user}/repos

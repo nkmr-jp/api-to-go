@@ -14,13 +14,15 @@ yarn setup
 add config file `.api-to-go.yaml`.
 ```yaml
 api.github.com:
-  - /users/{user}/repos
+  format:
+    - /users/{user}
+    - /users/{user}/repos
 ```
 run command.
 ```sh
 cd [your project dir]
 api-to-go  https://api.github.com/users/github/repos
-# > replaced : /users/github/repos -> /users/{user}/repos -> /users/user/repos
+# > format:    /users/{user}/repos
 # > generated: api.github.com/users/user/repos.go
 # > saved:     api.github.com/users/user/repos_sample.json
 ```

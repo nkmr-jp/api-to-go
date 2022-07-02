@@ -28,9 +28,9 @@ function _buildPath(url, configFile) {
     replacedPath: url.pathname,
     replacedUrl: `${url.hostname}${url.pathname}`,
   }
-  if (hostCfg !== undefined) {
-    for (let i = 0; i < hostCfg.length; i++) {
-      const replaced = _replacePath(url.pathname, hostCfg[i])
+  if (hostCfg?.format !== undefined) {
+    for (let i = 0; i < hostCfg.format.length; i++) {
+      const replaced = _replacePath(url.pathname, hostCfg.format[i])
       if (replaced) {
         ret = replaced
         ret["replacedUrl"] = `${url.hostname}${replaced.replacedPath}`
@@ -60,7 +60,7 @@ function _replacePath(pathname, format) {
     replacedArr.push(formatArr[j].replace("{", "").replace("}", ""))
   }
   const replacedPath = replacedArr.join("/")
-  console.log(`replaced : ${pathname} -> ${format} -> ${replacedPath}`)
+  console.log(`format:    ${format}`)
   return {
     pathname: pathname,
     pathFormat: format,
