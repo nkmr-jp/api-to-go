@@ -2,3 +2,5 @@
 .github
 .semver.yml
 tmp
+.release
+gitmoji-semver

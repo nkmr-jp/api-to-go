@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 17
       - name: Install jq yq
         run: |
           sudo wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq &&\
@@ -37,9 +37,16 @@ jobs:
         working-directory: ./.release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm install
           npx semantic-release
+      - name: Publish
+        working-directory: ./
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          git config --global user.email "nkmr.git@gmail.com"
+          git config --global user.name "nkmr-jp"
           npm run sync-version
           npm publish --access=public
+          git push
