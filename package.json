@@ -9,6 +9,7 @@
   },
   "homepage": "https://github.com/nkmr-jp/api-to-go#readme",
   "scripts": {
+    "sync-version": "npm version from-git --no-git-tag-version && git add package.json && git commit -m \":bookmark: [skip ci] v$(cat package.json | jq -r .version)\"",
     "fetch": "cd vendor && curl -OL https://raw.githubusercontent.com/mholt/json-to-go/master/json-to-go.js",
     "setup": "yarn install && yarn fetch && npm -f link && exec $SHELL -l"
   },
