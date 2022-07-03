@@ -4,3 +4,4 @@ node_modules
 *.go
 *.json
 tmp
+.node-version

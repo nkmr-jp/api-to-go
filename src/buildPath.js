@@ -42,11 +42,11 @@ function _buildPath(url, configFile) {
 }
 
 function _replacePath(pathname, format) {
-  const replacedArr = []
+  let replacedArr = []
   const pathArr = pathname.split('/')
   const formatArr = format.split('/')
   if (pathArr.length !== formatArr.length) {
-    return false
+    return
   }
   for (let j = 0; j < formatArr.length; j++) {
     if (pathArr[j] === formatArr[j]) {
@@ -55,10 +55,13 @@ function _replacePath(pathname, format) {
     }
     const val = formatArr[j].match(/^{.*}$/)
     if (val === null) {
+      replacedArr = []
       break
     }
     replacedArr.push(formatArr[j].replace("{", "").replace("}", ""))
   }
+  if (replacedArr.length === 0) return
+
   const replacedPath = replacedArr.join("/")
   console.log(`format:    ${format}`)
   return {
