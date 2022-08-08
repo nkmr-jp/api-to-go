@@ -18,6 +18,7 @@
     "api-to-go": "bin/api-to-go.js"
   },
   "dependencies": {
+    "commander": "^9.4.0",
     "js-yaml": "^4.1.0",
     "node-fetch": "2"
   },
