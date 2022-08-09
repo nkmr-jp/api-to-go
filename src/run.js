@@ -1,14 +1,22 @@
 const fetch = require('node-fetch');
-const { program } = require('commander');
 const fs = require('fs');
 const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
 const buildContent = require('./buildContent');
 
-function run(url) {
+function run(url, body, cliOpts) {
   const apiUrl = url.replace(/\/$/, '')
 
-  fetch(apiUrl)
+  const opts = {}
+  if (cliOpts?.method) opts.method = cliOpts?.method
+  if (cliOpts?.headers) opts.headers = JSON.parse(cliOpts.headers)
+  if (body) opts.body = body
+  if (body && !cliOpts?.method) opts.method = "POST"
+
+  // console.log(opts) // debug
+
+  // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  fetch(apiUrl, opts)
     .then(res => res.json())
     .then(json => {
         const url = new URL(apiUrl);
