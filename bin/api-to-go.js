@@ -10,9 +10,10 @@ program
   .version(packageJson.version)
   .description(packageJson.description)
   .argument('<url>', 'URL (required)')
-  .argument('[body]', 'HTTP request body. Specify by json string.')
-  .option('-H, --headers <json string>', 'http request headers')
+  .argument('[body]', 'HTTP request body. specify by json string or file(json|yml).')
+  .option('-H, --headers <string|file>', 'http request headers. specify by json string or file(json|yml).')
   .option('-X, --method <string>', 'specify request method to use.')
+  .option('-v, --verbose', 'make the operation more talkative.')
   .action(run)
 
 program.parse();

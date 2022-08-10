@@ -3,17 +3,21 @@ const fs = require('fs');
 const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
 const buildContent = require('./buildContent');
+const {isJsonString, loadJson, loadFile, loadJsonOrYaml} = require("./util");
 
 function run(url, body, cliOpts) {
+  if (cliOpts?.verbose) {
+    console.log("url: " + url)
+  }
   const apiUrl = url.replace(/\/$/, '')
+  let opts = {}
 
-  const opts = {}
-  if (cliOpts?.method) opts.method = cliOpts?.method
-  if (cliOpts?.headers) opts.headers = JSON.parse(cliOpts.headers)
-  if (body) opts.body = body
-  if (body && !cliOpts?.method) opts.method = "POST"
-
-  // console.log(opts) // debug
+  try {
+    opts = _buildOpts(body, cliOpts)
+  } catch (e) {
+    console.log(e.message);
+    return
+  }
 
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   fetch(apiUrl, opts)
@@ -34,6 +38,33 @@ function run(url, body, cliOpts) {
         });
       }
     );
+}
+
+function _buildOpts(body, cliOpts) {
+  const opts = {}
+  if (cliOpts?.method) opts.method = cliOpts?.method
+  if (cliOpts?.headers) {
+    if (isJsonString(cliOpts.headers)) {
+      opts.headers = JSON.parse(cliOpts.headers)
+    } else {
+      opts.headers = loadJsonOrYaml(cliOpts.headers)
+    }
+  }
+  if (body) {
+    if (!cliOpts?.method) {
+      opts.method = "POST"
+    }
+    if (isJsonString(cliOpts.headers)) {
+      opts.body = body
+    } else {
+      opts.body = JSON.stringify(loadJsonOrYaml(body))
+    }
+  }
+  if (cliOpts?.verbose) {
+    console.log("opts:")
+    console.log(opts)
+  }
+  return opts
 }
 
 module.exports = run;

@@ -1,5 +1,4 @@
-const yaml = require("js-yaml");
-const fs = require("fs");
+const {loadYaml} = require("./util");
 
 function buildPath(url, configFile = "./.api-to-go.yml") {
   const path = _buildPath(url, configFile)
@@ -20,7 +19,7 @@ function buildPath(url, configFile = "./.api-to-go.yml") {
 }
 
 function _buildPath(url, configFile) {
-  const cfg = _loadConfig(configFile)
+  const cfg = loadYaml(configFile)
   const hostCfg = cfg?.[url.hostname]
   let ret ={
     pathname: url.pathname,
@@ -74,14 +73,6 @@ function _replacePath(pathname, format) {
 function _capitalize(str) {
   const lower = str.toLowerCase();
   return str.charAt(0).toUpperCase() + lower.slice(1);
-}
-
-function _loadConfig(configFile) {
-  try {
-    return yaml.load(fs.readFileSync(configFile, 'utf8'));
-  } catch (e) {
-    console.log(e);
-  }
 }
 
 module.exports = buildPath;
