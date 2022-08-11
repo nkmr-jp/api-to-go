@@ -62,7 +62,7 @@ function _replacePath(pathname, format) {
   if (replacedArr.length === 0) return
 
   const replacedPath = replacedArr.join("/")
-  console.log(`format:    ${format}`)
+  console.log(`Format: ${format}`)
   return {
     pathname: pathname,
     pathFormat: format,

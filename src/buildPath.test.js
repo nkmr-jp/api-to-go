@@ -16,7 +16,7 @@ test('build path', () => {
   }
   const received = buildPath(
     new URL("https://api.github.com/users/github/repos"),
-    "./.api-to-go.test.yaml"
+    "./.api-to-go.test.yml"
   )
   expect(received).toEqual(expected);
 });
@@ -30,7 +30,7 @@ test('build path without format setting', () => {
   }
   const received = buildPath(
     new URL("https://api.github.com/organizations"),
-    "./.api-to-go.test.yaml"
+    "./.api-to-go.test.yml"
   )
   expect(received.path).toEqual(expected);
 });

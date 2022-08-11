@@ -11,7 +11,7 @@ program
   .description(packageJson.description)
   .argument('<url>', 'URL (required)')
   .argument('[body]', 'HTTP request body. specify by json string or file(json|yml).')
-  .option('-H, --headers <string|file>', 'http request headers. specify by json string or file(json|yml).')
+  .option('-H, --headers <string>', 'http request headers. specify by json string or file(json|yml).')
   .option('-X, --method <string>', 'specify request method to use.')
   .option('-D, --debug', 'enable debug mode')
   .action(run)

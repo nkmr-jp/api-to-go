@@ -6,9 +6,6 @@ const buildContent = require('./buildContent');
 const {loadJsonOrYaml, isJsonString} = require("./util");
 
 function run(url, body, cliOpts) {
-  if (cliOpts?.verbose) {
-    console.log("url: " + url)
-  }
   const apiUrl = url.replace(/\/$/, '')
   let opts = {}
 
@@ -22,7 +19,7 @@ function run(url, body, cliOpts) {
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   fetch(apiUrl, opts)
     .then(res => {
-      console.log(`status: ${res.status} ${res.statusText}`)
+      console.log(`Status: ${res.status} ${res.statusText}`)
       return res.json()
     })
     .then(json => {
@@ -33,11 +30,11 @@ function run(url, body, cliOpts) {
       fs.mkdirSync(path.dir, {recursive: true})
       fs.writeFile(path.jsonFilePath, JSON.stringify(json, null, "\t"), (err) => {
         if (err) throw err;
-        console.log(`saved: ${path.jsonFilePath}`)
+        console.log(`Saved: ${path.jsonFilePath}`)
       });
       fs.writeFile(path.goFilePath, content, (err) => {
         if (err) throw err;
-        console.log(`generated: ${path.goFilePath}`)
+        console.log(`Generated: ${path.goFilePath}`)
       });
     });
 }
