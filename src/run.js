@@ -21,10 +21,11 @@ function run(url, body, cliOpts) {
 
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   fetch(apiUrl, opts)
-    .then(res => res)
-    .then(payload => {
-      console.log(`status: ${payload.status} ${payload.statusText}`)
-      const json = payload.json()
+    .then(res => {
+      console.log(`status: ${res.status} ${res.statusText}`)
+      return res.json()
+    })
+    .then(json => {
       const url = new URL(apiUrl);
       const path = buildPath(url)
       const res = jsonToGo(JSON.stringify(json), path.struct);
