@@ -3,7 +3,7 @@ const fs = require('fs');
 const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
 const buildContent = require('./buildContent');
-const {isJsonString, loadJson, loadFile, loadJsonOrYaml} = require("./util");
+const {loadJsonOrYaml, isJsonString} = require("./util");
 
 function run(url, body, cliOpts) {
   if (cliOpts?.verbose) {
@@ -21,23 +21,24 @@ function run(url, body, cliOpts) {
 
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   fetch(apiUrl, opts)
-    .then(res => res.json())
-    .then(json => {
-        const url = new URL(apiUrl);
-        const path = buildPath(url)
-        const res = jsonToGo(JSON.stringify(json), path.struct);
-        const content = buildContent(res.go, path, url)
-        fs.mkdirSync(path.dir, {recursive: true})
-        fs.writeFile(path.jsonFilePath, JSON.stringify(json, null, "\t"), (err) => {
-          if (err) throw err;
-          console.log(`saved:     ${path.jsonFilePath}`)
-        });
-        fs.writeFile(path.goFilePath, content, (err) => {
-          if (err) throw err;
-          console.log(`generated: ${path.goFilePath}`)
-        });
-      }
-    );
+    .then(res => res)
+    .then(payload => {
+      console.log(`status: ${payload.status} ${payload.statusText}`)
+      const json = payload.json()
+      const url = new URL(apiUrl);
+      const path = buildPath(url)
+      const res = jsonToGo(JSON.stringify(json), path.struct);
+      const content = buildContent(res.go, path, url)
+      fs.mkdirSync(path.dir, {recursive: true})
+      fs.writeFile(path.jsonFilePath, JSON.stringify(json, null, "\t"), (err) => {
+        if (err) throw err;
+        console.log(`saved: ${path.jsonFilePath}`)
+      });
+      fs.writeFile(path.goFilePath, content, (err) => {
+        if (err) throw err;
+        console.log(`generated: ${path.goFilePath}`)
+      });
+    });
 }
 
 function _buildOpts(body, cliOpts) {
@@ -60,9 +61,11 @@ function _buildOpts(body, cliOpts) {
       opts.body = JSON.stringify(loadJsonOrYaml(body))
     }
   }
-  if (cliOpts?.verbose) {
-    console.log("opts:")
-    console.log(opts)
+  if (cliOpts?.debug) {
+    if (opts) {
+      console.error(opts)
+      console.error()
+    }
   }
   return opts
 }
