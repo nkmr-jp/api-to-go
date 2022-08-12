@@ -1,4 +1,4 @@
-const {loadYaml} = require("./util");
+const {loadYaml, loadConfig} = require("./common");
 
 function buildPath(url, configFile = "./.api-to-go.yml") {
   const path = _buildPath(url, configFile)
@@ -19,8 +19,7 @@ function buildPath(url, configFile = "./.api-to-go.yml") {
 }
 
 function _buildPath(url, configFile) {
-  const cfg = loadYaml(configFile)
-  const hostCfg = cfg?.[url.hostname]
+  const hostCfg = loadConfig(url, configFile)
   let ret ={
     pathname: url.pathname,
     pathFormat: null,

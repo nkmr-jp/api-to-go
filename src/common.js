@@ -47,3 +47,7 @@ exports.isYamlString = str => {
   }
   return true;
 };
+
+exports.loadConfig = (url, configFile) => {
+  return this.loadYaml(configFile)?.[url.hostname]
+}
