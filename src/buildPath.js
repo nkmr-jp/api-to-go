@@ -1,6 +1,6 @@
 const {loadYaml, loadConfig} = require("./common");
 
-function buildPath(url, configFile = "./.api-to-go.yml") {
+function buildPath(url, configFile) {
   const path = _buildPath(url, configFile)
   const pathArr = path.replacedUrl.split("/")
   const pkg = pathArr[pathArr.length - 2].replace(/\./g, '')

@@ -4,17 +4,13 @@ const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
 const {loadJsonOrYaml, isJsonString, loadConfig} = require("./common");
 
+let cliOpts
 
-let configFile = "./.api-to-go.yml"
-
-function run(urlStr, body, cliOpts) {
-  let comment
-  let url
-  let path
-  let cfg
+function run(urlStr, body, options) {
+  let comment, url, path, cfg
+  cliOpts = options
 
   let opts = {}
-
   try {
     opts = buildOpts(body, cliOpts)
   } catch (e) {
@@ -29,8 +25,8 @@ function run(urlStr, body, cliOpts) {
         console.log()
         const apiUrl = urlStr.replace(/\/$/, '')
         url = new URL(apiUrl);
-        cfg = loadConfig(url, configFile)
-        path = buildPath(url)
+        cfg = loadConfig(url, cliOpts.config)
+        path = buildPath(url, cliOpts.config)
 
         console.log(`API:`)
         if (cfg?.["docs"] !== undefined) console.log(`    Docs:     ${cfg?.["docs"]}`)
@@ -111,7 +107,7 @@ function buildContent(go, path, comment) {
 
 function buildComment(url, path, method, res) {
   let comment = ""
-  const cfg = loadConfig(url, configFile)
+  const cfg = loadConfig(url, cliOpts.config)
   if (cfg?.["docs"] !== undefined) {
     comment += `\n//  Docs:     ${cfg?.["docs"]}`
   }

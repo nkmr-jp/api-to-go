@@ -13,6 +13,7 @@ program
   .argument('[body]', 'HTTP request body. specify by json string or file(json|yml).')
   .option('-H, --headers <string>', 'http request headers. specify by json string or file(json|yml).')
   .option('-X, --method <string>', 'specify request method to use.')
+  .option('--config <string>', 'location of client config files.',"./.api-to-go.yml")
   .option('-D, --debug', 'enable debug mode')
   .action(run)
 
