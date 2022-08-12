@@ -28,11 +28,10 @@ function run(urlStr, body, options) {
         cfg = loadConfig(url, cliOpts.config)
         path = buildPath(url, cliOpts.config)
 
-        console.log(`API:`)
-        if (cfg?.["docs"] !== undefined) console.log(`    Docs:     ${cfg?.["docs"]}`)
-        if (path.path.pathFormat) console.log(`    Format:   ${path.path.pathFormat}`)
-        console.log(`    Request:  ${opts.method} ${url}`)
-        console.log(`    Response: ${res.status} ${res.statusText}`)
+        if (cfg?.["docs"] !== undefined) console.log(`Docs:     ${cfg?.["docs"]}`)
+        if (path.path.pathFormat) console.log(`Format:   ${path.path.pathFormat}`)
+        console.log(`Request:  ${opts.method} ${url}`)
+        console.log(`Response: ${res.status} ${res.statusText}`)
 
         comment = buildComment(url, path, opts.method, res)
         return res.json()
