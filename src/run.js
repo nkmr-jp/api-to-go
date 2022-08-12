@@ -30,12 +30,13 @@ function run(urlStr, body, cliOpts) {
         const apiUrl = urlStr.replace(/\/$/, '')
         url = new URL(apiUrl);
         cfg = loadConfig(url, configFile)
-        if (cfg?.["docs"] !== undefined) {
-          console.log(`Docs: ${cfg?.["docs"]}`)
-        }
         path = buildPath(url)
-        console.log(`Request: (${opts.method}) ${url}`)
-        console.log(`Response: ${res.status} ${res.statusText}`)
+
+        console.log(`API:`)
+        if (cfg?.["docs"] !== undefined) console.log(`    Docs:     ${cfg?.["docs"]}`)
+        if (path.path.pathFormat) console.log(`    Format:   ${path.path.pathFormat}`)
+        console.log(`    Request:  ${opts.method} ${url}`)
+        console.log(`    Response: ${res.status} ${res.statusText}`)
 
         comment = buildComment(url, path, opts.method, res)
         return res.json()
@@ -61,8 +62,8 @@ function write(json, path, content) {
   });
   console.log()
   console.log("Saved:")
-  console.log(`    ${path.jsonFilePath}`)
-  console.log(`    ${path.goFilePath}`)
+  console.log(`    Struct:  ${path.goFilePath}`)
+  console.log(`    Payload: ${path.jsonFilePath}`)
 }
 
 function buildOpts(body, cliOpts) {
@@ -112,12 +113,12 @@ function buildComment(url, path, method, res) {
   let comment = ""
   const cfg = loadConfig(url, configFile)
   if (cfg?.["docs"] !== undefined) {
-    comment += `\n//  Docs: ${cfg?.["docs"]}`
+    comment += `\n//  Docs:     ${cfg?.["docs"]}`
   }
   if (path.path.pathFormat) {
-    comment += `\n//  Format: ${path.path.pathFormat}`
+    comment += `\n//  Format:   ${path.path.pathFormat}`
   }
-  comment += `\n//  Request: (${method}) ${url.href}`
+  comment += `\n//  Request:  ${method} ${url.href}`
   comment += `\n//  Response: ${res.status} ${res.statusText}`
   return `${comment}\n//\n`
 }

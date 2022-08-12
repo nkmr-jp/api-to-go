@@ -20,7 +20,7 @@ function buildPath(url, configFile = "./.api-to-go.yml") {
 
 function _buildPath(url, configFile) {
   const hostCfg = loadConfig(url, configFile)
-  let ret ={
+  let ret = {
     pathname: url.pathname,
     pathFormat: null,
     replacedPath: url.pathname,
@@ -61,7 +61,6 @@ function _replacePath(pathname, format) {
   if (replacedArr.length === 0) return
 
   const replacedPath = replacedArr.join("/")
-  console.log(`Format: ${format}`)
   return {
     pathname: pathname,
     pathFormat: format,
