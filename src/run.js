@@ -30,7 +30,7 @@ function run(urlStr, body, options) {
         console.log(`Status:  ${res.status} ${res.statusText}`)
         console.log(`Request: ${opts.method} ${url}`)
         if (path.path.pathFormat) console.log(`Format:  ${path.path.pathFormat}`)
-        if (cfg?.["docs"] !== undefined) console.log(`Docs:    ${cfg?.["docs"]}`)
+        if (cfg?.["docs"] !== undefined) console.log(`Docs:    ${cfg?.["docs"].join(", ")}`)
 
         comment = buildComment(url, path, opts.method, res)
         return res.json()
@@ -56,8 +56,8 @@ function write(json, path, content) {
   });
   console.log()
   console.log("Generated Files:")
-  console.log(`  - ${path.goFilePath}`)
-  console.log(`  - ${path.jsonFilePath}`)
+  console.log(`  - ${path.goFilePath}:1`)
+  console.log(`  - ${path.jsonFilePath}:1`)
 }
 
 function buildOpts(body, cliOpts) {
@@ -117,7 +117,7 @@ function buildComment(url, path, method, res) {
     comment += `\n//\tFormat:  ${path.path.pathFormat}`
   }
   if (cfg?.["docs"] !== undefined) {
-    comment += `\n//\tDocs:    ${cfg?.["docs"]}`
+    comment += `\n//\tDocs:    ${cfg?.["docs"].join(", ")}`
   }
   return `${comment}\n`
 }
