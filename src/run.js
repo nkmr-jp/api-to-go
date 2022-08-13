@@ -99,7 +99,7 @@ function buildContent(go, path, comment) {
 `
   content += `package ${path.pkg}\n\n`
   if (go.indexOf('time.') !== -1) {
-    content += `${content}import "time"\n\n`
+    content += `import "time"\n\n`
   }
   content += `// ${go.split(" ")[1]} represents the response body from an HTTP request.\n//`
   content += comment
