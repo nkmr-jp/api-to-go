@@ -14,36 +14,37 @@ function run(urlStr, body, options) {
   try {
     opts = buildOpts(body, cliOpts)
   } catch (e) {
-    console.log(e.message);
+    console.error(e.message);
     return
   }
 
-  try {
-    // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    fetch(urlStr, opts)
-      .then(res => {
-        const apiUrl = urlStr.replace(/\/$/, '')
-        url = new URL(apiUrl);
-        cfg = loadConfig(url, cliOpts.config)
-        path = buildPath(url, cliOpts.config)
+  // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  fetch(urlStr, opts)
+    .then(res => {
+      const apiUrl = urlStr.replace(/\/$/, '')
+      url = new URL(apiUrl);
+      cfg = loadConfig(url, cliOpts.config)
+      path = buildPath(url, cliOpts.config)
 
-        console.log(`Status:  ${res.status} ${res.statusText}`)
-        console.log(`Request: ${opts.method} ${url}`)
-        if (path.path.pathFormat) console.log(`Format:  ${path.path.pathFormat}`)
-        if (cfg?.["docs"] !== undefined) console.log(`Docs:    ${cfg?.["docs"].join(", ")}`)
-
-        comment = buildComment(url, path, opts.method, res)
-        return res.json()
-      })
-      .then(json => {
+      console.log(`Status:  ${res.status} ${res.statusText}`)
+      console.log(`Request: ${opts.method} ${url}`)
+      if (path.path.pathFormat) console.log(`Format:  ${path.path.pathFormat}`)
+      if (cfg?.["docs"] !== undefined) console.log(`Docs:    ${cfg?.["docs"].join(", ")}`)
+      comment = buildComment(url, path, opts.method, res)
+      return res.json()
+    })
+    .then(json => {
         const struct = jsonToGo(JSON.stringify(json), path.struct);
         const content = buildContent(struct.go, path, comment)
         write(json, path, content)
-      })
-    ;
-  } catch (e) {
-    console.log(e.message);
-  }
+      }, () => {
+        console.log()
+        console.log("Response Body is empty.")
+      }
+    )
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 function write(json, path, content) {
@@ -79,9 +80,9 @@ function buildOpts(body, cliOpts) {
     } else {
       const bodyObj = loadJsonOrYaml(body)
       const sortedBodyObj = Object.keys(bodyObj).sort().reduce((ret, key) => {
-          ret[key] = bodyObj[key];
-          return ret;
-        }, {});
+        ret[key] = bodyObj[key];
+        return ret;
+      }, {});
       opts.body = JSON.stringify(sortedBodyObj)
     }
   }
