@@ -77,7 +77,12 @@ function buildOpts(body, cliOpts) {
     if (isJsonString(cliOpts.headers)) {
       opts.body = body
     } else {
-      opts.body = JSON.stringify(loadJsonOrYaml(body))
+      const bodyObj = loadJsonOrYaml(body)
+      const sortedBodyObj = Object.keys(bodyObj).sort().reduce((ret, key) => {
+          ret[key] = bodyObj[key];
+          return ret;
+        }, {});
+      opts.body = JSON.stringify(sortedBodyObj)
     }
   }
   if (cliOpts?.debug) {
