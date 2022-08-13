@@ -22,17 +22,15 @@ function run(urlStr, body, options) {
     // See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     fetch(urlStr, opts)
       .then(res => {
-        console.log()
         const apiUrl = urlStr.replace(/\/$/, '')
         url = new URL(apiUrl);
         cfg = loadConfig(url, cliOpts.config)
         path = buildPath(url, cliOpts.config)
 
-        console.log(`API Info:`)
-        if (cfg?.["docs"] !== undefined) console.log(`    Docs:     ${cfg?.["docs"]}`)
-        if (path.path.pathFormat) console.log(`    Format:   ${path.path.pathFormat}`)
-        console.log(`    Request:  ${opts.method} ${url}`)
-        console.log(`    Response: ${res.status} ${res.statusText}`)
+        console.log(`Status:  ${res.status} ${res.statusText}`)
+        console.log(`Request: ${opts.method} ${url}`)
+        if (path.path.pathFormat) console.log(`Format:  ${path.path.pathFormat}`)
+        if (cfg?.["docs"] !== undefined) console.log(`Docs:    ${cfg?.["docs"]}`)
 
         comment = buildComment(url, path, opts.method, res)
         return res.json()
@@ -58,8 +56,8 @@ function write(json, path, content) {
   });
   console.log()
   console.log("Generated Files:")
-  console.log(`    Struct:  ${path.goFilePath}`)
-  console.log(`    Payload: ${path.jsonFilePath}`)
+  console.log(`  - ${path.goFilePath}`)
+  console.log(`  - ${path.jsonFilePath}`)
 }
 
 function buildOpts(body, cliOpts) {
