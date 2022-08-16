@@ -1,7 +1,6 @@
-const yaml = require("js-yaml");
-const fs = require("fs");
+const {loadYaml, loadConfig} = require("./common");
 
-function buildPath(url, configFile = "./.api-to-go.yml") {
+function buildPath(url, configFile) {
   const path = _buildPath(url, configFile)
   const pathArr = path.replacedUrl.split("/")
   const pkg = pathArr[pathArr.length - 2].replace(/\./g, '')
@@ -14,15 +13,16 @@ function buildPath(url, configFile = "./.api-to-go.yml") {
     struct,
     pkg,
     dir,
-    jsonFilePath: `${dir}/${last}_sample.json`,
-    goFilePath: `${dir}/${last}.go`
+    jsonFilePath: `${dir}/${last}.json`,
+    goFilePath: `${dir}/${last}.go`,
+    paramJsonFilePath: `${dir}/${last}_param.json`,
+    paramGoFilePath: `${dir}/${last}_param.go`,
   }
 }
 
 function _buildPath(url, configFile) {
-  const cfg = _loadConfig(configFile)
-  const hostCfg = cfg?.[url.hostname]
-  let ret ={
+  const hostCfg = loadConfig(url, configFile)
+  let ret = {
     pathname: url.pathname,
     pathFormat: null,
     replacedPath: url.pathname,
@@ -63,7 +63,6 @@ function _replacePath(pathname, format) {
   if (replacedArr.length === 0) return
 
   const replacedPath = replacedArr.join("/")
-  console.log(`format:    ${format}`)
   return {
     pathname: pathname,
     pathFormat: format,
@@ -74,14 +73,6 @@ function _replacePath(pathname, format) {
 function _capitalize(str) {
   const lower = str.toLowerCase();
   return str.charAt(0).toUpperCase() + lower.slice(1);
-}
-
-function _loadConfig(configFile) {
-  try {
-    return yaml.load(fs.readFileSync(configFile, 'utf8'));
-  } catch (e) {
-    console.log(e);
-  }
 }
 
 module.exports = buildPath;
