@@ -31,12 +31,7 @@ function run(urlStr, body, options) {
       if (path.path.pathFormat) console.log(`Format:  ${path.path.pathFormat}`)
       if (cfg?.["docs"] !== undefined) console.log(`Docs:    ${cfg?.["docs"].join(", ")}`)
       comment = buildComment(url, path, opts.method, res)
-      return res.json()
-    })
-    .then(json => {
-      const struct = jsonToGo(JSON.stringify(json), path.struct);
-      const content = buildContent(struct.go, path, comment)
-      write(json, path, content)
+
       if (opts?.body) {
         const paramStruct = jsonToGo(opts?.body, path.struct + "Param");
         const paramContent = buildContent(
@@ -44,6 +39,13 @@ function run(urlStr, body, options) {
         )
         writeParam(JSON.stringify(JSON.parse(opts?.body), null, "\t"), path, paramContent)
       }
+
+      return res.json()
+    })
+    .then(json => {
+      const struct = jsonToGo(JSON.stringify(json), path.struct);
+      const content = buildContent(struct.go, path, comment)
+      write(json, path, content)
     }, () => {
       console.log()
       console.log("Response Body is empty.")
@@ -62,7 +64,7 @@ function write(json, path, content) {
     if (err) throw err;
   });
   console.log()
-  console.log("Generated Files:")
+  console.log("Response Body:")
   console.log(`  - ${path.goFilePath}:1`)
   console.log(`  - ${path.jsonFilePath}:1`)
 }
@@ -74,8 +76,10 @@ function writeParam(json, path, content) {
   fs.writeFile(path.paramGoFilePath, content, (err) => {
     if (err) throw err;
   });
-  console.log(`  - ${path.paramJsonFilePath}:1`)
+  console.log()
+  console.log("Request Body Parameter:")
   console.log(`  - ${path.paramGoFilePath}:1`)
+  console.log(`  - ${path.paramJsonFilePath}:1`)
 }
 
 function buildOpts(body, cliOpts) {
@@ -92,7 +96,7 @@ function buildOpts(body, cliOpts) {
     if (!cliOpts?.method) {
       opts.method = "POST"
     }
-    if (isJsonString(cliOpts.headers)) {
+    if (isJsonString(body)) {
       opts.body = body
     } else {
       const bodyObj = loadJsonOrYaml(body)
@@ -113,7 +117,6 @@ function buildOpts(body, cliOpts) {
   return opts
 }
 
-// TODO: Paramにも対応する
 function buildContent(go, path, comment, isParam = false) {
   let content = `// Generated Code But Editable.
 // Format The Code with \`go fmt\` or something and edit it manually to use it.
