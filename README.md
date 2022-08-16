@@ -9,22 +9,53 @@ npm i -g @nkmr-jp/api-to-go
 ```
 
 # Usage
-add config file `.api-to-go.yml`.
-```yaml
+```sh
+$ api-to-go --help
+Usage: api-to-go [options] <url> [body]
+
+Convert REST API's JSON payload to Golang struct.
+
+Arguments:
+  url                     URL (required)
+  body                    HTTP request body. specify by json string or file(json|yml).
+
+Options:
+  -v, --version           output the current version
+  -H, --headers <string>  http request headers. specify by json string or file(json|yml).
+  -X, --method <string>   specify request method to use.
+  --config <string>       location of client config files. (default: "./.api-to-go.yml")
+  -D, --debug             enable debug mode
+  -h, --help              display help for command
+```
+
+
+# Quick Start
+
+Add config file `.api-to-go.yml`.
+```yml
 api.github.com:
+  docs:
+    - https://docs.github.com/en/rest
   format:
     - /users/{user}
     - /users/{user}/repos
 ```
-run command.
+
+Run command.
 ```sh
 cd [your project dir]
 api-to-go  https://api.github.com/users/github/repos
-# > format:    /users/{user}/repos
-# > generated: api.github.com/users/user/repos.go
-# > saved:     api.github.com/users/user/repos_sample.json
+# > Status:  200 OK
+# > Request: GET https://api.github.com/users/github/repos
+# > Format:  /users/{user}/repos
+# > Docs:    https://docs.github.com/en/rest
+
+# > Response Body:
+# >   - api.github.com/users/user/repos.go:1
+# >   - api.github.com/users/user/repos.json:1
 ```
-check generated files and directories.
+
+Generated files and directories.
 ```sh
  tree -a .
 # > .
@@ -33,9 +64,10 @@ check generated files and directories.
 # >     └── users
 # >         └── user
 # >             ├── repos.go
-# >             └── repos_sample.json
+# >             └── repos.json
 ```
-check generated struct file `./api.github.com/users/user/repos.go`.
+
+Generated struct file `./api.github.com/users/user/repos.go`.
 ```go
 package user
 
