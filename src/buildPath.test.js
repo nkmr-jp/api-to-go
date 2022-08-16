@@ -5,6 +5,8 @@ test('build path', () => {
     "dir": "api.github.com/users/user",
     "goFilePath": "api.github.com/users/user/repos.go",
     "jsonFilePath": "api.github.com/users/user/repos_sample.json",
+    "requestGoFilePath": "api.github.com/users/user/repos_request.go",
+    "requestJsonFilePath": "api.github.com/users/user/repos_request_sample.json",
     "path": {
       "pathFormat": "/users/{user}/repos",
       "pathname": "/users/github/repos",

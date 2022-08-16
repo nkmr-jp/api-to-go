@@ -34,14 +34,20 @@ function run(urlStr, body, options) {
       return res.json()
     })
     .then(json => {
-        const struct = jsonToGo(JSON.stringify(json), path.struct);
-        const content = buildContent(struct.go, path, comment)
-        write(json, path, content)
-      }, () => {
-        console.log()
-        console.log("Response Body is empty.")
+      const struct = jsonToGo(JSON.stringify(json), path.struct);
+      const content = buildContent(struct.go, path, comment)
+      write(json, path, content)
+      if (opts?.body) {
+        const paramStruct = jsonToGo(opts?.body, path.struct + "Param");
+        const paramContent = buildContent(
+          paramStruct.go, path, buildComment(url, path, opts.method), true
+        )
+        writeParam(JSON.stringify(JSON.parse(opts?.body), null, "\t"), path, paramContent)
       }
-    )
+    }, () => {
+      console.log()
+      console.log("Response Body is empty.")
+    })
     .catch((error) => {
       console.error(error);
     });
@@ -59,6 +65,17 @@ function write(json, path, content) {
   console.log("Generated Files:")
   console.log(`  - ${path.goFilePath}:1`)
   console.log(`  - ${path.jsonFilePath}:1`)
+}
+
+function writeParam(json, path, content) {
+  fs.writeFile(path.paramJsonFilePath, json, (err) => {
+    if (err) throw err;
+  });
+  fs.writeFile(path.paramGoFilePath, content, (err) => {
+    if (err) throw err;
+  });
+  console.log(`  - ${path.paramJsonFilePath}:1`)
+  console.log(`  - ${path.paramGoFilePath}:1`)
 }
 
 function buildOpts(body, cliOpts) {
@@ -96,7 +113,8 @@ function buildOpts(body, cliOpts) {
   return opts
 }
 
-function buildContent(go, path, comment) {
+// TODO: Paramにも対応する
+function buildContent(go, path, comment, isParam = false) {
   let content = `// Generated Code But Editable.
 // Format The Code with \`go fmt\` or something and edit it manually to use it.
 //
@@ -107,15 +125,21 @@ function buildContent(go, path, comment) {
   if (go.indexOf('time.') !== -1) {
     content += `import "time"\n\n`
   }
-  content += `// ${go.split(" ")[1]} represents the response body from an HTTP request.\n//`
+  if (isParam) {
+    content += `// ${go.split(" ")[1]} is the HTTP request's body parameter.\n//`
+  } else {
+    content += `// ${go.split(" ")[1]} represents the response body from an HTTP request.\n//`
+  }
   content += comment
   content += go
   return content
 }
 
-function buildComment(url, path, method, res) {
+function buildComment(url, path, method, res = false) {
   let comment = ""
-  comment += `\n//\tStatus:  ${res.status} ${res.statusText}`
+  if (res) {
+    comment += `\n//\tStatus:  ${res.status} ${res.statusText}`
+  }
   comment += `\n//\tRequest: ${method} ${url.href}`
 
   const cfg = loadConfig(url, cliOpts.config)

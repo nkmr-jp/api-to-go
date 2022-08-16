@@ -13,8 +13,10 @@ function buildPath(url, configFile) {
     struct,
     pkg,
     dir,
-    jsonFilePath: `${dir}/${last}_sample.json`,
-    goFilePath: `${dir}/${last}.go`
+    jsonFilePath: `${dir}/${last}.json`,
+    goFilePath: `${dir}/${last}.go`,
+    paramJsonFilePath: `${dir}/${last}_param.json`,
+    paramGoFilePath: `${dir}/${last}_param.go`,
   }
 }
 
