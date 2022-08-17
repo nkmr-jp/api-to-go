@@ -1,22 +1,12 @@
 const yaml = require("js-yaml");
 const fs = require("fs");
-const path = require('path')
-
-exports.loadJsonOrYaml = file => {
-  switch (path.extname(file)) {
-    case '.json':
-      return this.loadJson(file)
-    case '.yml':
-      return this.loadYaml(file)
-    case '.yaml':
-      return this.loadYaml(file)
-    default:
-      throw new Error(`${file} is not json or yaml file`);
-  }
-}
 
 exports.loadJson = file => {
-  return JSON.parse(this.loadFile(file));
+  const str = this.loadFile(file)
+  if(!this.isJsonString(str)){
+    throw new Error(`${file} is not json file.`);
+  }
+  return JSON.parse(str);
 };
 
 exports.loadYaml = file => {
@@ -33,15 +23,6 @@ exports.loadFile = file => {
 exports.isJsonString = str => {
   try {
     JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
-};
-
-exports.isYamlString = str => {
-  try {
-    yaml.load(str);
   } catch (e) {
     return false;
   }

@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
-const {loadJsonOrYaml, isJsonString, loadConfig} = require("./common");
+const {isJsonString, loadConfig, loadFile, loadJson} = require("./common");
 
 let cliOpts
 
@@ -89,7 +89,7 @@ function buildOpts(body, cliOpts) {
     if (isJsonString(cliOpts.headers)) {
       opts.headers = JSON.parse(cliOpts.headers)
     } else {
-      opts.headers = loadJsonOrYaml(cliOpts.headers)
+      opts.headers = loadJson(cliOpts.headers)
     }
   }
   if (body) {
@@ -99,12 +99,11 @@ function buildOpts(body, cliOpts) {
     if (isJsonString(body)) {
       opts.body = body
     } else {
-      const bodyObj = loadJsonOrYaml(body)
-      const sortedBodyObj = Object.keys(bodyObj).sort().reduce((ret, key) => {
-        ret[key] = bodyObj[key];
-        return ret;
-      }, {});
-      opts.body = JSON.stringify(sortedBodyObj)
+      const bodyObj = loadFile(body)
+      if (!isJsonString(bodyObj)) {
+        throw new Error(`${body} is not json file.`);
+      }
+      opts.body = bodyObj
     }
   }
   if (cliOpts?.debug) {
