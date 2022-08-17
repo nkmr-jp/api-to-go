@@ -17,11 +17,11 @@ Convert REST API's JSON payload to Golang struct.
 
 Arguments:
   url                     URL (required)
-  body                    HTTP request body. specify by json string or file(json|yml).
+  body                    HTTP request body. specify by json string or file.
 
 Options:
   -v, --version           output the current version
-  -H, --headers <string>  http request headers. specify by json string or file(json|yml).
+  -H, --headers <string>  http request headers. specify by json string or file.
   -X, --method <string>   specify request method to use.
   --config <string>       location of client config files. (default: "./.api-to-go.yml")
   -D, --debug             enable debug mode
