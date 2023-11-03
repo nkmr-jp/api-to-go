@@ -47,6 +47,7 @@ jobs:
         run: |
           git config --global user.email "nkmr.git@gmail.com"
           git config --global user.name "nkmr-jp"
+          npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
           npm run sync-version
           npm publish --access=public
           git push
