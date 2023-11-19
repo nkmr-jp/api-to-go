@@ -32,20 +32,20 @@ function run(urlStr, body, options) {
       if (cfg?.["docs"] !== undefined) console.log(`Docs:    ${cfg?.["docs"].join(", ")}`)
       comment = buildComment(url, path, opts.method, res)
 
-      if (opts?.body) {
-        const paramStruct = jsonToGo(opts?.body, path.struct + "Param");
-        const paramContent = buildContent(
-          paramStruct.go, path, buildComment(url, path, opts.method), true
-        )
-        writeParam(JSON.stringify(JSON.parse(opts?.body), null, "\t"), path, paramContent)
-      }
-
       return res.json()
     })
     .then(json => {
       const struct = jsonToGo(JSON.stringify(json), path.struct);
       const content = buildContent(struct.go, path, comment)
       write(json, path, content)
+
+      if (opts?.body) {
+        const paramStruct = jsonToGo(opts?.body, path.struct + "Param");
+        const paramContent = buildContent(
+            paramStruct.go, path, buildComment(url, path, opts.method), true
+        )
+        writeParam(JSON.stringify(JSON.parse(opts?.body), null, "\t"), path, paramContent)
+      }
     }, () => {
       console.log()
       console.log("Response Body is empty.")
