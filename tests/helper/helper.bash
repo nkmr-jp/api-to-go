@@ -1,6 +1,7 @@
 #!/bin/bash
 
 load helper/doc_helper
+load helper/diff_helper
 
 setup() {
   echo "--start--"
