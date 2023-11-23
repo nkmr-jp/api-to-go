@@ -51,8 +51,8 @@ api-to-go  https://api.github.com/users/github/repos
 # > Docs:    https://docs.github.com/en/rest
 
 # > Response Body:
-# >   - api.github.com/users/user/repos.go:1
-# >   - api.github.com/users/user/repos.json:1
+# >   - api.github.com/users/user/repos_get.go:1
+# >   - api.github.com/users/user/repos_get.json:1
 ```
 
 Generated files and directories.
@@ -63,8 +63,8 @@ Generated files and directories.
 # > └── api.github.com
 # >     └── users
 # >         └── user
-# >             ├── repos.go
-# >             └── repos.json
+# >             ├── repos_get.go
+# >             └── repos_get.json
 ```
 
 Generated struct file `./api.github.com/users/user/repos.go`.
@@ -78,13 +78,13 @@ package user
 
 import "time"
 
-// Repos represents the response body from an HTTP request.
+// ReposGet is the structure of the HTTP Response Body.
 //
 //	Status:  200 OK
 //	Request: GET https://api.github.com/users/github/repos
 //	Format:  /users/{user}/repos
 //	Docs:    https://docs.github.com/en/rest
-type Repos []struct {
+type ReposGet []struct {
 	ID int `json:"id"`
 	NodeID string `json:"node_id"`
 	Name string `json:"name"`

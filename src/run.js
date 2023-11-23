@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
-const {isJsonString, loadConfig, loadFile, loadJson} = require("./common");
+const {isJsonString, loadConfig, loadFile, loadJson, capitalize} = require("./common");
 
 let cliOpts
 
@@ -35,16 +35,26 @@ function run(urlStr, body, options) {
       return res.json()
     })
     .then(json => {
-      const struct = jsonToGo(JSON.stringify(json), path.struct);
-      const content = buildContent(struct.go, path, comment)
+      let method = capitalize(opts?.method)
+      const struct = jsonToGo(JSON.stringify(json), path.struct + method);
+      const content = buildContent(struct.go, path, comment,"")
       write(json, path, content)
 
       if (opts?.body) {
-        const paramStruct = jsonToGo(opts?.body, path.struct + "Param");
-        const paramContent = buildContent(
-            paramStruct.go, path, buildComment(url, path, opts.method), true
+        const bodyStruct = jsonToGo(opts?.body, path.struct + method + "Body");
+        const bodyContent = buildContent(
+            bodyStruct.go, path, buildComment(url, path, opts.method), "body"
         )
-        writeParam(JSON.stringify(JSON.parse(opts?.body), null, "\t"), path, paramContent)
+        writeBodyParam(JSON.stringify(JSON.parse(opts?.body), null, "\t"), path, bodyContent)
+      }
+      if (url?.search) {
+        const queryJson = queryToJson(new URLSearchParams(url.search))
+        const queryStr = JSON.stringify(queryJson, null, "\t")
+        const queryStruct = jsonToGo(queryStr, path.struct + method + "Query");
+        const queryContent = buildContent(
+            queryStruct.go, path, buildComment(url, path, opts.method), "query"
+        )
+        writeQueryParam(queryStr, path, queryContent)
       }
     }, () => {
       console.log()
@@ -69,17 +79,30 @@ function write(json, path, content) {
   console.log(`  - ${path.jsonFilePath}:1`)
 }
 
-function writeParam(json, path, content) {
-  fs.writeFile(path.paramJsonFilePath, json, (err) => {
+function writeBodyParam(json, path, content) {
+  fs.writeFile(path.bodyJsonFilePath, json, (err) => {
     if (err) throw err;
   });
-  fs.writeFile(path.paramGoFilePath, content, (err) => {
+  fs.writeFile(path.bodyGoFilePath, content, (err) => {
     if (err) throw err;
   });
   console.log()
   console.log("Request Body Parameter:")
-  console.log(`  - ${path.paramGoFilePath}:1`)
-  console.log(`  - ${path.paramJsonFilePath}:1`)
+  console.log(`  - ${path.bodyGoFilePath}:1`)
+  console.log(`  - ${path.bodyJsonFilePath}:1`)
+}
+
+function writeQueryParam(json, path, content) {
+  fs.writeFile(path.queryJsonFilePath, json, (err) => {
+    if (err) throw err;
+  });
+  fs.writeFile(path.queryGoFilePath, content, (err) => {
+    if (err) throw err;
+  });
+  console.log()
+  console.log("Request Query Parameter:")
+  console.log(`  - ${path.queryGoFilePath}:1`)
+  console.log(`  - ${path.queryJsonFilePath}:1`)
 }
 
 function buildOpts(body, cliOpts) {
@@ -116,7 +139,7 @@ function buildOpts(body, cliOpts) {
   return opts
 }
 
-function buildContent(go, path, comment, isParam = false) {
+function buildContent(go, path, comment, paramType) {
   let content = `// Generated Code But Editable.
 // Format The Code with \`go fmt\` or something and edit it manually to use it.
 //
@@ -127,10 +150,12 @@ function buildContent(go, path, comment, isParam = false) {
   if (go.indexOf('time.') !== -1) {
     content += `import "time"\n\n`
   }
-  if (isParam) {
-    content += `// ${go.split(" ")[1]} is the HTTP request's body parameter.\n//`
-  } else {
-    content += `// ${go.split(" ")[1]} represents the response body from an HTTP request.\n//`
+  if (paramType === "body") {
+    content += `// ${go.split(" ")[1]} is the structure of the the HTTP Request Body Parameter.\n//`
+  } else if (paramType === "query") {
+    content += `// ${go.split(" ")[1]} is the structure of the HTTP Request Query Parameter.\n//`
+  }else{
+    content += `// ${go.split(" ")[1]} is the structure of the HTTP Response Body.\n//`
   }
   content += comment
   content += go
@@ -152,6 +177,14 @@ function buildComment(url, path, method, res = false) {
     comment += `\n//\tDocs:    ${cfg?.["docs"].join(", ")}`
   }
   return `${comment}\n`
+}
+
+function queryToJson(query) {
+  const json = {}
+  for (const [key, value] of query.entries()) {
+    json[key] = value
+  }
+  return json
 }
 
 module.exports = run;

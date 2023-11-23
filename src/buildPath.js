@@ -1,11 +1,11 @@
-const {loadYaml, loadConfig} = require("./common");
+const {loadYaml, loadConfig, capitalize} = require("./common");
 
 function buildPath(url, configFile, opts) {
   const path = _buildPath(url, configFile)
   const pathArr = path.replacedUrl.split("/")
   const pkg = pathArr[pathArr.length - 2].replace(/\./g, '')
   const last = pathArr[pathArr.length - 1] || "index"
-  const struct = _capitalize(last)
+  const struct = capitalize(last)
   pathArr.pop()
   const dir = pathArr.join("/")
   let method = opts?.method.toLowerCase()
@@ -72,11 +72,6 @@ function _replacePath(pathname, format) {
     pathFormat: format,
     replacedPath: replacedPath,
   }
-}
-
-function _capitalize(str) {
-  const lower = str.toLowerCase();
-  return str.charAt(0).toUpperCase() + lower.slice(1);
 }
 
 module.exports = buildPath;
