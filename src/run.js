@@ -24,7 +24,7 @@ function run(urlStr, body, options) {
       const apiUrl = urlStr.replace(/\/$/, '')
       url = new URL(apiUrl);
       cfg = loadConfig(url, cliOpts.config)
-      path = buildPath(url, cliOpts.config)
+      path = buildPath(url, cliOpts.config, opts)
 
       console.log(`Status:  ${res.status} ${res.statusText}`)
       console.log(`Request: ${opts.method} ${url}`)

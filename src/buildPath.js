@@ -1,6 +1,6 @@
 const {loadYaml, loadConfig} = require("./common");
 
-function buildPath(url, configFile) {
+function buildPath(url, configFile, opts) {
   const path = _buildPath(url, configFile)
   const pathArr = path.replacedUrl.split("/")
   const pkg = pathArr[pathArr.length - 2].replace(/\./g, '')
@@ -8,15 +8,19 @@ function buildPath(url, configFile) {
   const struct = _capitalize(last)
   pathArr.pop()
   const dir = pathArr.join("/")
+  let method = opts?.method.toLowerCase()
+
   return {
     path,
     struct,
     pkg,
     dir,
-    jsonFilePath: `${dir}/${last}.json`,
-    goFilePath: `${dir}/${last}.go`,
-    paramJsonFilePath: `${dir}/${last}_param.json`,
-    paramGoFilePath: `${dir}/${last}_param.go`,
+    jsonFilePath: `${dir}/${last}_${method}.json`,
+    goFilePath: `${dir}/${last}_${method}.go`,
+    queryJsonFilePath: `${dir}/${last}_${method}_query.json`,
+    queryGoFilePath: `${dir}/${last}_${method}_query.go`,
+    bodyJsonFilePath: `${dir}/${last}_${method}_body.json`,
+    bodyGoFilePath: `${dir}/${last}_${method}_body.go`,
   }
 }
 
