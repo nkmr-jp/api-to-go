@@ -3,10 +3,12 @@ const buildPath = require('./buildPath');
 test('build path', () => {
   const expected = {
     "dir": "api.github.com/users/user",
-    "goFilePath": "api.github.com/users/user/repos.go",
-    "jsonFilePath": "api.github.com/users/user/repos.json",
-    "paramGoFilePath": "api.github.com/users/user/repos_param.go",
-    "paramJsonFilePath": "api.github.com/users/user/repos_param.json",
+    "goFilePath": "api.github.com/users/user/repos_get.go",
+    "jsonFilePath": "api.github.com/users/user/repos_get.json",
+    "queryGoFilePath": "api.github.com/users/user/repos_get_query.go",
+    "queryJsonFilePath": "api.github.com/users/user/repos_get_query.json",
+    "bodyGoFilePath": "api.github.com/users/user/repos_get_body.go",
+    "bodyJsonFilePath": "api.github.com/users/user/repos_get_body.json",
     "path": {
       "pathFormat": "/users/{user}/repos",
       "pathname": "/users/github/repos",
@@ -16,9 +18,13 @@ test('build path', () => {
     "pkg": "user",
     "struct": "Repos"
   }
+  let opts = {
+    method: "GET",
+  }
   const received = buildPath(
     new URL("https://api.github.com/users/github/repos"),
-    "./.api-to-go.test.yml"
+    "./src/.api-to-go.test.yml",
+      opts
   )
   expect(received).toEqual(expected);
 });
@@ -32,7 +38,7 @@ test('build path without format setting', () => {
   }
   const received = buildPath(
     new URL("https://api.github.com/organizations"),
-    "./.api-to-go.test.yml"
+    "./src/.api-to-go.test.yml"
   )
   expect(received.path).toEqual(expected);
 });

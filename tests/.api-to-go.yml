@@ -1,0 +1,6 @@
+"jsonplaceholder.typicode.com":
+  docs:
+    - https://jsonplaceholder.typicode.com/
+  format:
+    - /posts/{post}
+    - /todos/{todo}

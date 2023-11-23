@@ -20,6 +20,11 @@ exports.loadFile = file => {
   return fs.readFileSync(file, 'utf8');
 };
 
+exports.capitalize = str => {
+  const lower = str.toLowerCase();
+  return str.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 exports.isJsonString = str => {
   try {
     JSON.parse(str);
