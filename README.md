@@ -78,7 +78,7 @@ package user
 
 import "time"
 
-// ReposGet is the structure of the HTTP Response Body.
+// ReposGet is the struct of the HTTP Response Body.
 //
 //	Status:  200 OK
 //	Request: GET https://api.github.com/users/github/repos
