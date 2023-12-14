@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
-const {isJsonString, loadConfig, loadFile, loadJson, capitalize} = require("./common");
+const {isJsonString, loadConfig, loadFile, loadJson, toPascalCase} = require("./common");
 
 let cliOpts
 
@@ -35,7 +35,7 @@ function run(urlStr, body, options) {
       return res.json()
     })
     .then(json => {
-      let method = capitalize(opts?.method)
+      let method = toPascalCase(opts?.method)
       const struct = jsonToGo(JSON.stringify(json), path.struct + method);
       const content = buildContent(struct.go, path, comment,"")
       write(json, path, content)
@@ -151,11 +151,11 @@ function buildContent(go, path, comment, paramType) {
     content += `import "time"\n\n`
   }
   if (paramType === "body") {
-    content += `// ${go.split(" ")[1]} is the structure of the the HTTP Request Body Parameter.\n//`
+    content += `// ${go.split(" ")[1]} is the struct of the the HTTP Request Body Parameter.\n//`
   } else if (paramType === "query") {
-    content += `// ${go.split(" ")[1]} is the structure of the HTTP Request Query Parameter.\n//`
+    content += `// ${go.split(" ")[1]} is the struct of the HTTP Request Query Parameter.\n//`
   }else{
-    content += `// ${go.split(" ")[1]} is the structure of the HTTP Response Body.\n//`
+    content += `// ${go.split(" ")[1]} is the struct of the HTTP Response Body.\n//`
   }
   content += comment
   content += go
