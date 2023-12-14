@@ -151,7 +151,7 @@ function buildContent(go, path, comment, paramType) {
     content += `import "time"\n\n`
   }
   if (paramType === "body") {
-    content += `// ${go.split(" ")[1]} is the struct of the the HTTP Request Body Parameter.\n//`
+    content += `// ${go.split(" ")[1]} is the struct of the HTTP Request Body Parameter.\n//`
   } else if (paramType === "query") {
     content += `// ${go.split(" ")[1]} is the struct of the HTTP Request Query Parameter.\n//`
   }else{
