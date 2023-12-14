@@ -1,11 +1,11 @@
-const {loadYaml, loadConfig, capitalize} = require("./common");
+const {loadConfig, toPascalCase} = require("./common");
 
 function buildPath(url, configFile, opts) {
   const path = _buildPath(url, configFile)
   const pathArr = path.replacedUrl.split("/")
   const pkg = pathArr[pathArr.length - 2].replace(/\./g, '')
   const last = pathArr[pathArr.length - 1] || "index"
-  const struct = capitalize(last)
+  const struct = toPascalCase(last)
   pathArr.pop()
   const dir = pathArr.join("/")
   let method = opts?.method.toLowerCase()

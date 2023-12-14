@@ -20,9 +20,13 @@ exports.loadFile = file => {
   return fs.readFileSync(file, 'utf8');
 };
 
-exports.capitalize = str => {
-  const lower = str.toLowerCase();
-  return str.charAt(0).toUpperCase() + lower.slice(1);
+exports.toPascalCase = str => {
+  return str
+      .replace(/[\s_\-]+/g, ' ')
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join('');
 }
 
 exports.isJsonString = str => {

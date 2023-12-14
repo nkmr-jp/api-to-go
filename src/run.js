@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const jsonToGo = require('../vendor/json-to-go.js');
 const buildPath = require('./buildPath');
-const {isJsonString, loadConfig, loadFile, loadJson, capitalize} = require("./common");
+const {isJsonString, loadConfig, loadFile, loadJson, toPascalCase} = require("./common");
 
 let cliOpts
 
@@ -35,7 +35,7 @@ function run(urlStr, body, options) {
       return res.json()
     })
     .then(json => {
-      let method = capitalize(opts?.method)
+      let method = toPascalCase(opts?.method)
       const struct = jsonToGo(JSON.stringify(json), path.struct + method);
       const content = buildContent(struct.go, path, comment,"")
       write(json, path, content)
