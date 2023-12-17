@@ -10,7 +10,6 @@ function buildPath(url, configFile, opts) {
   pathArr.pop()
 
   if (hostCfg.root !== undefined) {
-    console.log(pathArr)
     pathArr[0] = hostCfg.root
   }
 
