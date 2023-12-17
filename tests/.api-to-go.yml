@@ -1,4 +1,5 @@
 "jsonplaceholder.typicode.com":
+  root: jsonplaceholder
   docs:
     - https://jsonplaceholder.typicode.com/
   format:
