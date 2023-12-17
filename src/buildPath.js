@@ -1,12 +1,19 @@
 const {loadConfig, toPascalCase} = require("./common");
 
 function buildPath(url, configFile, opts) {
-  const path = _buildPath(url, configFile)
+  const hostCfg = loadConfig(url, configFile)
+  const path = _buildPath(url, hostCfg)
   const pathArr = path.replacedUrl.split("/")
   const pkg = pathArr[pathArr.length - 2].replace(/\./g, '')
   const last = pathArr[pathArr.length - 1] || "index"
   const struct = toPascalCase(last)
   pathArr.pop()
+
+  if (hostCfg.root !== undefined) {
+    console.log(pathArr)
+    pathArr[0] = hostCfg.root
+  }
+
   const dir = pathArr.join("/")
   let method = opts?.method.toLowerCase()
 
@@ -24,8 +31,7 @@ function buildPath(url, configFile, opts) {
   }
 }
 
-function _buildPath(url, configFile) {
-  const hostCfg = loadConfig(url, configFile)
+function _buildPath(url, hostCfg) {
   let ret = {
     pathname: url.pathname,
     pathFormat: null,

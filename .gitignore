@@ -7,3 +7,4 @@ tmp
 .node-version
 tests/docs
 tests/jsonplaceholder.typicode.com
+tests/jsonplaceholder
