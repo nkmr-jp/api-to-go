@@ -44,10 +44,9 @@ jobs:
           npx semantic-release
       - name: Publish
         working-directory: ./
-        env:
-          NODE_AUTH_TOKEN: ''
         run: |
-          rm -f "$NPM_CONFIG_USERCONFIG"
+          npm install -g npm@latest
+          unset NODE_AUTH_TOKEN
           git config --global user.email "nkmr.git@gmail.com"
           git config --global user.name "nkmr-jp"
           npm run sync-version
