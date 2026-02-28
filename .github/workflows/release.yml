@@ -10,20 +10,22 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - name: Install jq yq
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install yq
         run: |
-          sudo wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq &&\
-          sudo chmod +x /usr/bin/jq
-          sudo pip install yq
+          pip install --break-system-packages yq
           jq --version
           yq --version
       - name: Install gitmoji-semver
@@ -42,12 +44,9 @@ jobs:
           npx semantic-release
       - name: Publish
         working-directory: ./
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config --global user.email "nkmr.git@gmail.com"
           git config --global user.name "nkmr-jp"
-          npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
           npm run sync-version
-          npm publish --access=public
+          npm publish --access=public --provenance
           git push
