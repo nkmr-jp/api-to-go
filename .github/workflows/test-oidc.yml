@@ -20,15 +20,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Publish (dry-run)
+          registry-url: 'https://registry.npmjs.org'
+      - name: Publish test
         run: |
           npm install -g npm@latest
-          echo "npm version: $(npm --version)"
+          echo "=== Before cleanup ==="
+          echo "npm: $(npm --version)"
+          cat "$NPM_CONFIG_USERCONFIG" 2>/dev/null || echo "no .npmrc"
           echo "NODE_AUTH_TOKEN set: ${NODE_AUTH_TOKEN:+yes}"
-          echo "NPM_CONFIG_USERCONFIG: ${NPM_CONFIG_USERCONFIG:-not set}"
-          npm publish --access=public --provenance --dry-run 2>&1 || true
-          echo "---"
-          echo "Now testing actual auth (expect version conflict if auth works):"
+          echo "=== Removing auth token from .npmrc ==="
+          sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
+          unset NODE_AUTH_TOKEN
+          cat "$NPM_CONFIG_USERCONFIG"
+          echo "=== Publishing ==="
           npm publish --access=public --provenance 2>&1; EXIT=$?
           echo "Exit code: $EXIT"
           exit $EXIT
